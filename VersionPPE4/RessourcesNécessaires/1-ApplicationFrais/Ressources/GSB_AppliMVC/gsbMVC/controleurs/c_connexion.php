@@ -18,9 +18,9 @@ switch($action){
 			include("vues/v_connexion.php");
 		}
 		else{
-			$id = $visiteur['id'];
-			$nom =  $visiteur['nom'];
-			$prenom = $visiteur['prenom'];
+			$id = $visiteur['ID'];
+			$nom =  $visiteur['NOM'];
+			$prenom = $visiteur['PRENOM'];
 			connecter($id,$nom,$prenom);
 			include("vues/v_sommaire.php");
 		}

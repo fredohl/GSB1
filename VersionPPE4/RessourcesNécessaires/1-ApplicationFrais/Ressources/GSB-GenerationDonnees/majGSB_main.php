@@ -5,14 +5,14 @@ include("include/fct.inc.php");
 
 /* Modification des paramètres de connexion */
 
-$serveur='mysql:host=localhost';
-$bdd='dbname=gsbV2';   		
-$user='root' ;    		
-$mdp='' ;	
+$serveur='oci:dbname=172.16.5.77:1521/xe';
+//$bdd='dbname=gsbV2';   		
+$user='utilisateur' ;    		
+$mdp='utilisateur' ;	
 
 /* fin paramètres*/
 
-$pdo = new PDO($serveur.';'.$bdd, $user, $mdp);
+$pdo = new PDO($serveur, $user, $mdp);
 $pdo->query("SET CHARACTER SET utf8"); 
 
 set_time_limit(0);

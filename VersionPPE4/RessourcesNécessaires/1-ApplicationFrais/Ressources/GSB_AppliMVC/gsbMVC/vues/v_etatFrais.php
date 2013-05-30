@@ -13,7 +13,7 @@
          <?php
          foreach ( $lesFraisForfait as $unFraisForfait ) 
 		 {
-			$libelle = $unFraisForfait['libelle'];
+			$libelle = $unFraisForfait['LIBELLE'];
 		?>	
 			<th> <?php echo $libelle?></th>
 		 <?php
@@ -24,7 +24,7 @@
         <?php
           foreach (  $lesFraisForfait as $unFraisForfait  ) 
 		  {
-				$quantite = $unFraisForfait['quantite'];
+				$quantite = $unFraisForfait['QUANTITE'];
 		?>
                 <td class="qteForfait"><?php echo $quantite?> </td>
 		 <?php
@@ -38,19 +38,31 @@
              <tr>
                 <th class="date">Date</th>
                 <th class="libelle">Libellé</th>
-                <th class='montant'>Montant</th>                
+                <th class="montant">Montant</th> 
+                <th class="modification">Modification </th>
+                <th class="suppression"> Suppression </th>
              </tr>
         <?php      
           foreach ( $lesFraisHorsForfait as $unFraisHorsForfait ) 
 		  {
-			$date = $unFraisHorsForfait['date'];
-			$libelle = $unFraisHorsForfait['libelle'];
-			$montant = $unFraisHorsForfait['montant'];
+			$date = $unFraisHorsForfait['DATE1'];
+			$libelle = $unFraisHorsForfait['LIBELLE'];
+			$montant = $unFraisHorsForfait['MONTANT'];
+                        $_SESSION['date'] = $date;
+                        $_SESSION['libelle'] = $libelle;
+                        $_SESSION['montant'] = $montant;
 		?>
              <tr>
                 <td><?php echo $date ?></td>
                 <td><?php echo $libelle ?></td>
                 <td><?php echo $montant ?></td>
+                
+                
+             <form method="POST" action ="index.php?uc=etatFrais&action=voirEtatFrais ">
+                <td> <input type="submit" value ="Modifier" /> </td>
+                <td> <input type="submit" value ="Supprimer" /> </td>
+                <? echo $_SESSION['date']. "" .$_SESSION['libelle']."".$_SESSION['montant'];?>
+                </form>
              </tr>
         <?php 
           }

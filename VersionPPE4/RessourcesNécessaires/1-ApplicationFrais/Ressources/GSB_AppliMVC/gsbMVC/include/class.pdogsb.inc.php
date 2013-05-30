@@ -16,10 +16,10 @@
  */
 
 class PdoGsb{   		
-      	private static $serveur='mysql:host=localhost';
-      	private static $bdd='dbname=gsbV2';   		
-      	private static $user='root' ;    		
-      	private static $mdp='' ;	
+      	private static $serveur='oci:dbname=172.16.5.77:1521/xe';
+      	//private static $bdd='dbname=gsbV2';   		
+      	private static $user='UTILISATEUR' ;    		
+      	private static $mdp='utilisateur' ;	
 		private static $monPdo;
 		private static $monPdoGsb=null;
 /**
@@ -27,7 +27,7 @@ class PdoGsb{
  * pour toutes les méthodes de la classe
  */				
 	private function __construct(){
-    	PdoGsb::$monPdo = new PDO(PdoGsb::$serveur.';'.PdoGsb::$bdd, PdoGsb::$user, PdoGsb::$mdp); 
+    	PdoGsb::$monPdo = new PDO(PdoGsb::$serveur, PdoGsb::$user, PdoGsb::$mdp); 
 		PdoGsb::$monPdo->query("SET CHARACTER SET utf8");
 	}
 	public function _destruct(){
@@ -79,7 +79,7 @@ class PdoGsb{
 		$lesLignes = $res->fetchAll();
 		$nbLignes = count($lesLignes);
 		for ($i=0; $i<$nbLignes; $i++){
-			$date = $lesLignes[$i]['date'];
+			$date = $lesLignes[$i]['DATE1'];
 			$lesLignes[$i]['date'] =  dateAnglaisVersFrancais($date);
 		}
 		return $lesLignes; 
@@ -174,7 +174,7 @@ class PdoGsb{
 		where fichefrais.mois = '$mois' and fichefrais.idvisiteur = '$idVisiteur'";
 		$res = PdoGsb::$monPdo->query($req);
 		$laLigne = $res->fetch();
-		if($laLigne['nblignesfrais'] == 0){
+		if($laLigne['NBLIGNESFRAIS'] == 0){
 			$ok = true;
 		}
 		return $ok;
@@ -189,7 +189,7 @@ class PdoGsb{
 		$req = "select max(mois) as dernierMois from fichefrais where fichefrais.idvisiteur = '$idVisiteur'";
 		$res = PdoGsb::$monPdo->query($req);
 		$laLigne = $res->fetch();
-		$dernierMois = $laLigne['dernierMois'];
+		$dernierMois = $laLigne['DERNIERMOIS'];
 		return $dernierMois;
 	}
 	
@@ -204,7 +204,7 @@ class PdoGsb{
 	public function creeNouvellesLignesFrais($idVisiteur,$mois){
 		$dernierMois = $this->dernierMoisSaisi($idVisiteur);
 		$laDerniereFiche = $this->getLesInfosFicheFrais($idVisiteur,$dernierMois);
-		if($laDerniereFiche['idEtat']=='CR'){
+		if($laDerniereFiche['IDETAT']=='CR'){
 				$this->majEtatFicheFrais($idVisiteur, $dernierMois,'CL');
 				
 		}
@@ -213,7 +213,7 @@ class PdoGsb{
 		PdoGsb::$monPdo->exec($req);
 		$lesIdFrais = $this->getLesIdFrais();
 		foreach($lesIdFrais as $uneLigneIdFrais){
-			$unIdFrais = $uneLigneIdFrais['idfrais'];
+			$unIdFrais = $uneLigneIdFrais['IDFRAIS'];
 			$req = "insert into lignefraisforfait(idvisiteur,mois,idFraisForfait,quantite) 
 			values('$idVisiteur','$mois','$unIdFrais',0)";
 			PdoGsb::$monPdo->exec($req);
@@ -257,7 +257,7 @@ class PdoGsb{
 		$lesMois =array();
 		$laLigne = $res->fetch();
 		while($laLigne != null)	{
-			$mois = $laLigne['mois'];
+			$mois = $laLigne['MOIS'];
 			$numAnnee =substr( $mois,0,4);
 			$numMois =substr( $mois,4,2);
 			$lesMois["$mois"]=array(
